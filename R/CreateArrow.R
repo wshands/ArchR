@@ -1666,19 +1666,23 @@ createArrowFiles <- function(
 
         if(threads == 1){
           .logThis(dt, name = paste0("Just before threads = 1 setkey dt RG"), logFile = logFile)
-          dt$RG
+          dt
 
           #Order by bc
           setkey(dt, RG)
-          dt <- dt[order(RG)]
-          RG <- Rle(dt$RG)
-          .logThis(dt, name = paste0("Just after threads = 1 Rle dt RG"), logFile = logFile)
+          .logThis(dt, name = paste0("Just after setkey dt RG"), logFile = logFile)
+	  dt <- dt[order(RG)]
+          .logThis(dt, name = paste0("Just after order dt RG"), logFile = logFile)
+	  RG <- Rle(dt$RG)
+          .logThis(RG, name = paste0("Just after Rle dt RG"), logFile = logFile)
 
           chrTmp <- mcols(tileChromSizes)$chunkName[x]
           chrPos <- paste0("Fragments/",chrTmp,"/Ranges")
           chrRGLengths <- paste0("Fragments/",chrTmp,"/RGLengths")
           chrRGValues <- paste0("Fragments/",chrTmp,"/RGValues")
           lengthRG <- length(RG@lengths)
+          .logThis(lengthRG, name = paste0("Just after length  RG@lengths"), logFile = logFile)
+
           o <- h5createGroup(tmpFile, paste0("Fragments/",chrTmp))
           o <- .suppressAll(h5createDataset(tmpFile, chrPos, storage.mode = "integer", dims = c(nrow(dt), 2), level = 0))
           o <- .suppressAll(h5createDataset(tmpFile, chrRGLengths, storage.mode = "integer", dims = c(lengthRG, 1), level = 0))
@@ -1689,6 +1693,7 @@ createArrowFiles <- function(
           o <- h5write(obj = RG@lengths, file = tmpFile, name = chrRGLengths)
           o <- h5write(obj = RG@values, file = tmpFile, name = chrRGValues)
 
+          .logThis(dt, name = paste0("Just before rm RG"), logFile = logFile)
           rm(dt, RG)
           gc()
 
