@@ -1563,7 +1563,7 @@ createArrowFiles <- function(
         }
 
       }else{
-        
+        message("bcTag is not qname")
         dt <- tryCatch({
 
           scanChunk <- scanBam(bamFile,
@@ -1584,7 +1584,7 @@ createArrowFiles <- function(
               end = scanChunk$pos + abs(scanChunk$isize) - 1 + offsetMinus,
               RG = scanChunk$tag[[bcTag]]
             )
-
+          message("dt converted to data table")
         }, error = function(e){
           
           NULL
@@ -1636,11 +1636,14 @@ createArrowFiles <- function(
       }
 
       if(x == 1){
+	message("In x == 1 log block")
         .logThis(dt, name = paste0(prefix, " .bamToTmp Fragments-Chunk-(",x," of ",length(tileChromSizes),")-", tileChromSizes[x]), logFile = logFile)
-        .logThis(unique(dt$V4), name = paste0(prefix, " .bamToTmp Barcodes-Chunk-(",x," of ",length(tileChromSizes),")-", tileChromSizes[x]), logFile = logFile)
+        .logThis(unique(dt$RG), name = paste0(prefix, " .bamToTmp Barcodes-Chunk-(",x," of ",length(tileChromSizes),")-", tileChromSizes[x]), logFile = logFile)
+        #.logThis(unique(dt$V4), name = paste0(prefix, " .bamToTmp Barcodes-Chunk-(",x," of ",length(tileChromSizes),")-", tileChromSizes[x]), logFile = logFile)
       }
 
       #No NAs
+      message("Just before is na dt RG")
       dt <- dt[!is.na(dt$RG), , drop=FALSE] 
       dt <- dt[!is.na(dt$start), , drop=FALSE]
       dt <- dt[!is.na(dt$end), , drop=FALSE]
