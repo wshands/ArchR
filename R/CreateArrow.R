@@ -1637,13 +1637,16 @@ createArrowFiles <- function(
 
       if(x == 1){
 	message("In x == 1 log block")
+        .logThis(dt, name = paste0("In x == 1 log block"), logFile = logFile)
         .logThis(dt, name = paste0(prefix, " .bamToTmp Fragments-Chunk-(",x," of ",length(tileChromSizes),")-", tileChromSizes[x]), logFile = logFile)
-        .logThis(unique(dt$RG), name = paste0(prefix, " .bamToTmp Barcodes-Chunk-(",x," of ",length(tileChromSizes),")-", tileChromSizes[x]), logFile = logFile)
+        .logThis(unique(dt$RG), name = paste0(prefix, "walts .bamToTmp Barcodes-Chunk-(",x," of ",length(tileChromSizes),")-", tileChromSizes[x]), logFile = logFile)
         #.logThis(unique(dt$V4), name = paste0(prefix, " .bamToTmp Barcodes-Chunk-(",x," of ",length(tileChromSizes),")-", tileChromSizes[x]), logFile = logFile)
       }
 
       #No NAs
       message("Just before is na dt RG")
+      .logThis(dt, name = paste0("Just before is na dt RG"), logFile = logFile)
+
       dt <- dt[!is.na(dt$RG), , drop=FALSE] 
       dt <- dt[!is.na(dt$start), , drop=FALSE]
       dt <- dt[!is.na(dt$end), , drop=FALSE]
@@ -1662,11 +1665,14 @@ createArrowFiles <- function(
         errorCheck <- errorCheck + 1
 
         if(threads == 1){
+          .logThis(dt, name = paste0("Just before threads = 1 setkey dt RG"), logFile = logFile)
+          dt$RG
 
           #Order by bc
           setkey(dt, RG)
           dt <- dt[order(RG)]
           RG <- Rle(dt$RG)
+          .logThis(dt, name = paste0("Just after threads = 1 Rle dt RG"), logFile = logFile)
 
           chrTmp <- mcols(tileChromSizes)$chunkName[x]
           chrPos <- paste0("Fragments/",chrTmp,"/Ranges")
@@ -1689,6 +1695,8 @@ createArrowFiles <- function(
           return(list(tmpChrFile = NULL, errorCheck = errorCheck))
 
         }else{
+          .logThis(dt, name = paste0("Just before mul threads mcols"), logFile = logFile)
+          dt$RG
 
           chrTmp <- mcols(tileChromSizes)$chunkName[x]
 
@@ -1729,6 +1737,7 @@ createArrowFiles <- function(
       }
 
     }, error = function(e){
+      .logThis(dt, name = paste0("In error function"), logFile = logFile)
 
       errorList <- list(
         x = x,
