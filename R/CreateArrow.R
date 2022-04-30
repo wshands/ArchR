@@ -1673,7 +1673,7 @@ createArrowFiles <- function(
           .logThis(dt, name = paste0("Just after setkey dt RG"), logFile = logFile)
           #dt <- dt[order(RG)]
           .logThis(dt$RG, name = paste0("dt$RG Just before order dt RG"), logFile = logFile)
-          dt <- dt[order(dt$RG)]
+          dt <- dt[order(dt$RG),]
           .logThis(dt, name = paste0("Just after order dt RG"), logFile = logFile)
           RG <- Rle(dt$RG)
           .logThis(RG, name = paste0("Just after Rle dt RG"), logFile = logFile)
@@ -1717,7 +1717,7 @@ createArrowFiles <- function(
 
           #Order by bc
           setkey(dt, RG)
-          dt <- dt[order(RG)]
+          dt <- dt[order(dt$RG),]
           RG <- Rle(dt$RG)
 
           chrPos <- paste0(chrTmp, "._.Ranges")
