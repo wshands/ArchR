@@ -1671,9 +1671,14 @@ createArrowFiles <- function(
           #Order by bc
           setkey(dt, RG)
           .logThis(dt, name = paste0("Just after setkey dt RG"), logFile = logFile)
-	  dt <- dt[order(RG)]
+          #dt <- dt[order(RG)]
+          .logThis(RG, name = paste0("RG Just before order dt RG"), logFile = logFile)
+          .logThis(dt$RG, name = paste0("dt$RG Just before order dt RG"), logFile = logFile)
+          .logThis(RG, name = paste0("my RG Just before order dt RG"), logFile = logFile)
+          myRG <- dt$RG
+          dt <- dt[order(myRG)]
           .logThis(dt, name = paste0("Just after order dt RG"), logFile = logFile)
-	  RG <- Rle(dt$RG)
+          RG <- Rle(dt$RG)
           .logThis(RG, name = paste0("Just after Rle dt RG"), logFile = logFile)
 
           chrTmp <- mcols(tileChromSizes)$chunkName[x]
