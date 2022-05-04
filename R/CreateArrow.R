@@ -1286,7 +1286,8 @@ createArrowFiles <- function(
 
           #Order by bc
           setkey(dt, V4)
-          dt <- dt[order(V4)]
+          dt <- dt[order(dt$V4),]
+#	  dt <- dt[order(V4)]
           RG <- Rle(paste0(dt$V4))
 
           chrTmp <- mcols(tileChromSizes)$chunkName[x]
@@ -1322,7 +1323,8 @@ createArrowFiles <- function(
 
           #Order by bc
           setkey(dt, V4)
-          dt <- dt[order(V4)]
+          dt <- dt[order(dt$V4),]
+#	  dt <- dt[order(V4)]
           RG <- Rle(paste0(dt$V4))
 
           chrPos <- paste0(chrTmp, "._.Ranges")
@@ -1912,7 +1914,8 @@ createArrowFiles <- function(
   dt <- dt[, sum(lengths.V1),by=list(values.V1)]
   
   #Order to reduce number of hyperslabs
-  dt <- dt[order(V1,decreasing=TRUE)]
+  #dt <- dt[order(V1,decreasing=TRUE)]
+  dt <- dt[order(dt$V1,decreasing=TRUE),]
   .logThis(dt, name = paste0(prefix, " BarcodeFrequencyTable"), logFile)
  
   bcPass <- BStringSet(dt$values.V1[dt$V1 >= minFrags & dt$V1 <= maxFrags])
