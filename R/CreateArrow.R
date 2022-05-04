@@ -1874,10 +1874,17 @@ createArrowFiles <- function(
   #######################################################################################################
   .logDiffTime(sprintf("%s Counting Unique Barcodes From Temporary File", prefix), t1 = tstart, verbose = FALSE, logFile = logFile)
   o <- h5closeAll()
+  .logThis(chunkNames, name = paste0("Just h5 close all"), logFile = logFile)
+
   dtList <- lapply(seq_along(chunkNames), function(x){
     chrTmp <- chunkNames[x]
+    .logThis(chrTmp, name = paste0("Just after chunk names"), logFile = logFile)
+
     values  <- h5read(tmpFile, paste0("Fragments/", chrTmp, "/RGValues"))
     lengths <- h5read(tmpFile, paste0("Fragments/", chrTmp, "/RGLengths"))
+    .logThis(lengths, name = paste0("Just after h5read lengths"), logFile = logFile)
+    .logThis(values, name = paste0("Just after h5read values"), logFile = logFile)
+
     dt <- tryCatch({
       if(length(values) > 0 & length(lengths) > 0){
         d <- data.table(
@@ -1895,6 +1902,13 @@ createArrowFiles <- function(
   })
   names(dtList) <- chunkNames
   dt <- Reduce("rbind", dtList)
+
+  .logThis(lengths, name = paste0("Just before sum lengths.V1"), logFile = logFile)
+  lengths
+  lengths.V1
+  values
+  values.V1
+
   dt <- dt[, sum(lengths.V1),by=list(values.V1)]
   
   #Order to reduce number of hyperslabs
