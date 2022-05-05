@@ -1905,14 +1905,15 @@ createArrowFiles <- function(
   names(dtList) <- chunkNames
   dt <- Reduce("rbind", dtList)
 
-  .logThis(lengths, name = paste0("Just before sum lengths.V1"), logFile = logFile)
+  .logThis(lengths, name = paste0("Just before print lengths vaules"), logFile = logFile)
   lengths
-  lengths.V1
+  #lengths.V1
   values
-  values.V1
-
+  #values.V1
+  .logThis(lengths, name = paste0("Just before sum lengths.V1"), logFile = logFile)
   dt <- dt[, sum(lengths.V1),by=list(values.V1)]
-  
+
+  .logThis(lengths, name = paste0("Just before dt order dt v1"), logFile = logFile)
   #Order to reduce number of hyperslabs
   #dt <- dt[order(V1,decreasing=TRUE)]
   dt <- dt[order(dt$V1,decreasing=TRUE),]
